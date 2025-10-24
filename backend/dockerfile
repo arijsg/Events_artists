@@ -1,0 +1,24 @@
+# ============================
+# Étape 1 — Image de base
+# ============================
+FROM eclipse-temurin:17-jdk
+
+# ============================
+# Étape 2 — Répertoire de travail
+# ============================
+WORKDIR /app
+
+# ============================
+# Étape 3 — Copier le fichier JAR dans le conteneur
+# ============================
+COPY event-0.0.1-SNAPSHOT.jar app.jar
+
+# ============================
+# Étape 4 — Exposer le port de l’API
+# ============================
+EXPOSE 8080
+
+# ============================
+# Étape 5 — Commande de lancement
+# ============================
+ENTRYPOINT ["java", "-jar", "app.jar"]
