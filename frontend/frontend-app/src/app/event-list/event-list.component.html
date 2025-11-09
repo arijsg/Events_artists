@@ -1,0 +1,81 @@
+<div class="event-list-container">
+  <!-- Header -->
+  <div class="header-section">
+    <h1 class="main-title">
+      <mat-icon class="title-icon">music_note</mat-icon>
+      Événements à venir
+    </h1>
+    <p class="subtitle">Découvrez les meilleurs événements musicaux</p>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="60" color="accent"></mat-spinner>
+    <p class="loading-text">Chargement des événements...</p>
+  </div>
+
+  <!-- Grille d'événements Material Cards -->
+  <div class="events-grid" *ngIf="!isLoading && !errorMessage">
+    <mat-card 
+      *ngFor="let event of getPaginatedEvents(); let i = index" 
+      class="event-card"
+      [style.animation-delay]="i * 0.1 + 's'"
+      matRipple
+      [matRippleColor]="'rgba(102, 126, 234, 0.2)'">
+      
+      <!-- Date Badge avec Chip Material -->
+      <mat-chip-set class="date-badge">
+        <mat-chip class="date-chip" highlighted>
+          <div class="chip-content">
+            <span class="month">{{ getMonth(event.startDate) }}</span>
+            <span class="day">{{ getDay(event.startDate) }}</span>
+          </div>
+        </mat-chip>
+      </mat-chip-set>
+
+      <mat-card-content>
+        <h3 class="event-title">{{ event.label }}</h3>
+        
+        <div class="event-date">
+          <mat-icon>calendar_today</mat-icon>
+          <span>{{ formatDate(event.startDate) }}</span>
+        </div>
+        
+        <div class="event-duration" *ngIf="event.endDate && event.endDate !== event.startDate">
+          <mat-icon>schedule</mat-icon>
+          <span>Jusqu'au {{ formatDate(event.endDate) }}</span>
+        </div>
+        
+        <button 
+          mat-raised-button
+          [routerLink]="['/events', event.id]"
+          class="view-button">
+          <mat-icon>arrow_forward</mat-icon>
+          Voir les détails
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Message si aucun événement -->
+  <mat-card *ngIf="!isLoading && !errorMessage && events.length === 0" class="no-events-card">
+    <mat-card-content class="no-events-content">
+      <mat-icon class="empty-icon">theater_comedy</mat-icon>
+      <h2>Aucun événement disponible</h2>
+      <p>Revenez plus tard pour découvrir de nouveaux événements !</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Pagination Material -->
+  <div class="pagination-wrapper" *ngIf="!isLoading && totalPages > 1">
+    <mat-paginator
+      [length]="totalElements"
+      [pageSize]="pageSize"
+      [pageIndex]="currentPage"
+      [pageSizeOptions]="[5, 10, 20, 50]"
+      (page)="handlePageEvent($event)"
+      showFirstLastButtons
+      class="custom-paginator">
+    </mat-paginator>
+  </div>
+</div>

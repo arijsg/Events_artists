@@ -1,0 +1,177 @@
+<div class="event-detail-container">
+  <!-- Bouton retour -->
+  <button mat-icon-button class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="60" color="accent"></mat-spinner>
+    <p class="loading-text">Chargement...</p>
+  </div>
+
+  <!-- Message d'erreur -->
+  <mat-card *ngIf="errorMessage && !isLoading" class="error-card">
+    <mat-card-content>
+      <div class="error-content">
+        <mat-icon class="error-icon">error_outline</mat-icon>
+        <div>
+          <h2>Erreur</h2>
+          <p>{{ errorMessage }}</p>
+          <button mat-raised-button color="primary" (click)="goBack()">
+            Retour à la liste
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Contenu principal -->
+  <div *ngIf="event && !isLoading && !errorMessage" class="content-wrapper">
+    
+    <!-- En-tête de l'événement -->
+    <mat-card class="event-header-card">
+      <mat-card-content>
+        <div class="header-top">
+          <div class="event-title-section">
+            <mat-icon class="title-icon">event</mat-icon>
+            <h1 class="event-title">{{ event.label }}</h1>
+          </div>
+          <div class="action-buttons">
+            <button 
+              mat-mini-fab 
+              color="primary" 
+              (click)="toggleEdit()"
+              [matTooltip]="isEditing ? 'Annuler' : 'Modifier'"
+              class="edit-button">
+              <mat-icon>{{ isEditing ? 'close' : 'edit' }}</mat-icon>
+            </button>
+            <button 
+              mat-mini-fab 
+              color="warn" 
+              (click)="deleteEvent()"
+              matTooltip="Supprimer"
+              class="delete-button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Informations de dates (mode lecture) -->
+        <div *ngIf="!isEditing" class="date-info">
+          <div class="date-item">
+            <mat-icon>event_available</mat-icon>
+            <div>
+              <span class="date-label">Début :</span>
+              <span class="date-value">{{ formatDate(event.startDate) }}</span>
+            </div>
+          </div>
+          <div class="date-item">
+            <mat-icon>event_busy</mat-icon>
+            <div>
+              <span class="date-label">Fin :</span>
+              <span class="date-value">{{ formatDate(event.endDate) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulaire d'édition -->
+        <form *ngIf="isEditing" [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="edit-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nom de l'événement</mat-label>
+            <input matInput formControlName="label" placeholder="Ex: Hellfest 2025">
+            <mat-icon matPrefix>label</mat-icon>
+            <mat-error *ngIf="eventForm.get('label')?.invalid">
+              {{ labelError }}
+            </mat-error>
+          </mat-form-field>
+
+          <div class="date-fields">
+            <mat-form-field appearance="outline">
+              <mat-label>Date de début</mat-label>
+              <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+              <mat-error *ngIf="eventForm.get('startDate')?.invalid">
+                La date de début est obligatoire
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Date de fin</mat-label>
+              <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+              <mat-error *ngIf="eventForm.get('endDate')?.invalid">
+                La date de fin est obligatoire
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-error *ngIf="eventForm.hasError('dateInvalid')" class="form-error">
+            {{ dateError }}
+          </mat-error>
+
+          <div class="form-actions">
+            <button mat-raised-button type="button" (click)="toggleEdit()">
+              Annuler
+            </button>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              type="submit" 
+              [disabled]="eventForm.invalid || isLoading">
+              <mat-icon>save</mat-icon>
+              Enregistrer
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- Section des artistes -->
+    <mat-card class="artists-card">
+      <mat-card-header>
+        <mat-card-title class="artists-title">
+          <mat-icon>mic</mat-icon>
+          Artistes participants
+          <span class="artist-count">({{ event.artists.length || 0 }})</span>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="!event.artists || event.artists.length === 0" class="no-artists">
+          <mat-icon class="empty-icon">music_off</mat-icon>
+          <p>Aucun artiste associé à cet événement</p>
+          <button mat-raised-button color="primary">
+            <mat-icon>add</mat-icon>
+            Ajouter un artiste
+          </button>
+        </div>
+
+        <div *ngIf="event.artists && event.artists.length > 0" class="artists-grid">
+          <mat-chip-set>
+            <mat-chip 
+              *ngFor="let artist of event.artists"
+              class="artist-chip"
+              [removable]="true"
+              (removed)="removeArtist(artist.id)">
+              <mat-icon matChipAvatar>person</mat-icon>
+              {{ artist.label }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          </mat-chip-set>
+
+          <button mat-raised-button color="accent" class="add-artist-button">
+            <mat-icon>add_circle</mat-icon>
+            Ajouter un artiste
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
