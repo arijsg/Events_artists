@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+frontend/frontend-app/node_modules/
+
+# Angular build
+dist/
+frontend/frontend-app/dist/
+
+# Angular cache
+.angular/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+Thumbs.db
+.DS_Store
