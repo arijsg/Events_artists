@@ -1,0 +1,83 @@
+<div class="artist-detail-container">
+
+  <!-- HEADER -->
+  <div class="header-section">
+    <h1 class="main-title">
+      <mat-icon class="title-icon">person</mat-icon>
+      Détail de l'artiste
+    </h1>
+  </div>
+  <button mat-flat-button routerLink="/artists" class="back-button">
+  <mat-icon>arrow_back</mat-icon>
+  Retour à la liste
+</button>
+
+  <!-- LOADING -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p class="loading-text">Chargement...</p>
+  </div>
+
+  <!-- ERREUR -->
+  <mat-card *ngIf="errorMessage" class="error-card">
+    <mat-card-content>
+      <mat-icon class="error-icon">error</mat-icon>
+      <p>{{ errorMessage }}</p>
+    </mat-card-content>
+  </mat-card>
+  
+
+  <!-- DETAILS ARTISTE -->
+ <mat-card class="artist-card" *ngIf="artist && !isLoading">
+    <mat-card-content>
+
+      <h2 class="section-title">Informations</h2>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom de l'artiste</mat-label>
+        <input matInput [(ngModel)]="artist.label">
+      </mat-form-field>
+
+      <div class="button-group">
+        <button mat-raised-button color="primary" class="save-button"
+                (click)="saveArtist()" [disabled]="isSaving">
+          <mat-icon>save</mat-icon>
+          Sauvegarder
+        </button>
+
+        <button mat-raised-button color="warn" class="delete-button"
+                (click)="deleteArtist()" [disabled]="isSaving">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+  <!-- EVENTS -->
+  <h2 class="section-title">Événements associés</h2>
+
+  <div class="events-grid" *ngIf="events.length > 0">
+    <mat-card *ngFor="let ev of events" class="event-card" matRipple>
+      <mat-card-content>
+
+        <h3 class="event-title">{{ ev.label }}</h3>
+
+        <div class="event-date">
+          <mat-icon>calendar_today</mat-icon>
+          Du {{ ev.startDate }} au {{ ev.endDate }}
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card *ngIf="events.length === 0 && !isLoading" class="no-events-card">
+    <mat-card-content>
+      <mat-icon class="empty-icon">event_busy</mat-icon>
+      <p>Cet artiste ne participe à aucun événement.</p>
+    </mat-card-content>
+  </mat-card>
+
+</div>

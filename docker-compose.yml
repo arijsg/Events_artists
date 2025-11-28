@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  backend:
+    image: tp2-backend
+    container_name: tp2-backend-container
+    ports:
+      - "8080:8080"
+    networks:
+      - tp2-network
+
+  frontend:
+    image: tp2-frontend
+    container_name: tp2-frontend-container
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - tp2-network
+
+networks:
+  tp2-network:
+    driver: bridge
