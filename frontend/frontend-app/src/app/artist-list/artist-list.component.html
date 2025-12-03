@@ -1,0 +1,105 @@
+<div class="artist-list-container">
+  <!-- Header -->
+  <div class="header-section">
+  <h1 class="main-title">
+    <mat-icon class="title-icon">music_note</mat-icon>
+    Artistes
+    <mat-icon class="title-icon">equalizer</mat-icon>
+  </h1>
+
+  <button mat-raised-button class="create-button" (click)="openCreateDialog()">
+    <mat-icon>add</mat-icon>
+    Ajouter un artiste
+  </button>
+
+  <p class="subtitle">Découvrez les artistes et leurs événements associés</p>
+</div>
+
+  <!-- Barre de recherche -->
+  <div class="search-section">
+    <mat-form-field appearance="outline">
+      <mat-label>Rechercher un artiste...</mat-label>
+      <input matInput [(ngModel)]="searchQuery" (input)="onSearch()" />
+      <button matSuffix mat-icon-button *ngIf="searchQuery" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p class="loading-text">Chargement des artistes...</p>
+  </div>
+
+  <!-- Grille des artistes -->
+  <div class="artists-grid" *ngIf="!isLoading && !errorMessage">
+    <mat-card
+      *ngFor="let artist of artists; let i = index"
+      class="artist-card"
+      [style.animation-delay]="i * 0.1 + 's'"
+      matRipple
+      [matRippleColor]="'rgba(255, 255, 255, 0.15)'"
+    >
+      <mat-card-content>
+        <h3 class="artist-name">{{ artist.label }}</h3>
+
+        <!-- Chips des événements -->
+        <mat-chip-set *ngIf="artist.events?.length">
+          <mat-chip
+            *ngFor="let ev of artist.events"
+            class="event-chip"
+            color="primary"
+            selected
+          >
+            {{ ev.label }}
+          </mat-chip>
+        </mat-chip-set>
+
+        <p *ngIf="!artist.events?.length" class="no-event-text">
+          Aucun événement associé
+        </p>
+
+        <button
+          mat-raised-button
+          [routerLink]="['/artists', artist.id]"
+          class="view-button"
+        >
+          <mat-icon>arrow_forward</mat-icon>
+          Voir détails
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Aucun artiste -->
+  <mat-card
+    *ngIf="!isLoading && !errorMessage && artists.length === 0"
+    class="no-artists-card"
+  >
+    <mat-card-content class="no-artists-content">
+      <mat-icon class="empty-icon">group</mat-icon>
+      <h2>Aucun artiste trouvé</h2>
+      <p>Essayez une autre recherche ou revenez plus tard.</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Pagination -->
+  <div class="pagination-wrapper" *ngIf="!isLoading && !isSearching && totalPages > 1">
+    <mat-paginator
+      [length]="totalElements"
+      [pageSize]="pageSize"
+      [pageIndex]="currentPage"
+      [pageSizeOptions]="[10]"
+      (page)="handlePageEvent($event)"
+      showFirstLastButtons
+      class="custom-paginator"
+    >
+    </mat-paginator>
+    <div class="search-info" *ngIf="isSearching && artists.length > 0">
+    <p class="search-result-text">
+    <mat-icon>search</mat-icon>
+    {{ artists.length }} artiste(s) trouvé(s) pour "{{ searchQuery }}"
+  </p>
+</div>
+  </div>
+</div>
