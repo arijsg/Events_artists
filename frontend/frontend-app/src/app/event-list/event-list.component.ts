@@ -50,7 +50,7 @@ interface PageResponse {
 export class EventListComponent implements OnInit {
   events: Event[] = [];
   currentPage = 0;
-  pageSize = 5;
+  pageSize = 6;
   totalPages = 1;
   totalElements = 0;
   isLoading = false;

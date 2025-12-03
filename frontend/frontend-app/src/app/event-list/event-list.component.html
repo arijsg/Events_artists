@@ -8,6 +8,18 @@
     <p class="subtitle">Découvrez les meilleurs événements musicaux</p>
   </div>
 
+  <div class="add-event-wrapper">
+    <button 
+      mat-raised-button 
+      color="primary"
+      class="add-event-button"
+      [routerLink]="['/events/new']">
+      <mat-icon>add</mat-icon>
+      Ajouter un événement
+    </button>
+  </div>
+
+
   <!-- Loading Spinner -->
   <div class="loading-container" *ngIf="isLoading">
     <mat-spinner diameter="60" color="accent"></mat-spinner>
@@ -35,7 +47,14 @@
 
       <mat-card-content>
         <h3 class="event-title">{{ event.label }}</h3>
-        
+        <div class="artists-list" *ngIf="event.artists && event.artists.length > 0">
+          <mat-chip-listbox>
+            <mat-chip *ngFor="let artist of event.artists" class="artist-chip">
+              {{ artist.name }}
+            </mat-chip>
+          </mat-chip-listbox>
+        </div>
+
         <div class="event-date">
           <mat-icon>calendar_today</mat-icon>
           <span>{{ formatDate(event.startDate) }}</span>
@@ -72,7 +91,7 @@
       [length]="totalElements"
       [pageSize]="pageSize"
       [pageIndex]="currentPage"
-      [pageSizeOptions]="[5, 10, 20, 50]"
+      [pageSizeOptions]="[6, 12, 24, 48]"
       (page)="handlePageEvent($event)"
       showFirstLastButtons
       class="custom-paginator">
