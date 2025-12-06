@@ -142,20 +142,19 @@
       </mat-card-header>
 
       <mat-card-content>
+        <!-- Message si aucun artiste -->
         <div *ngIf="!event.artists || event.artists.length === 0" class="no-artists">
           <mat-icon class="empty-icon">music_off</mat-icon>
           <p>Aucun artiste associé à cet événement</p>
-          <button mat-raised-button color="primary">
-            <mat-icon>add</mat-icon>
-            Ajouter un artiste
-          </button>
         </div>
 
+        <!-- Liste des artistes existants -->
         <div *ngIf="event.artists && event.artists.length > 0" class="artists-grid">
           <mat-chip-set>
             <mat-chip 
               *ngFor="let artist of event.artists"
               class="artist-chip"
+              [routerLink]="['/artists', artist.id]"
               [removable]="true"
               (removed)="removeArtist(artist.id)">
               <mat-icon matChipAvatar>person</mat-icon>
@@ -165,13 +164,70 @@
               </button>
             </mat-chip>
           </mat-chip-set>
+        </div>
 
-          <button mat-raised-button color="accent" class="add-artist-button">
+        <!-- Bouton ajouter (toujours visible SI formulaire fermé) -->
+        <div class="add-artist-section" *ngIf="!showAddArtistForm">
+          <button 
+            mat-raised-button 
+            color="accent" 
+            class="add-artist-button" 
+            (click)="openAddArtistForm()">
             <mat-icon>add_circle</mat-icon>
             Ajouter un artiste
           </button>
         </div>
+       
       </mat-card-content>
     </mat-card>
+
+    <!-- Formulaire d'ajout d'artiste (carte séparée) -->
+    <mat-card class="add-artist-card" *ngIf="showAddArtistForm">
+      <mat-card-content>
+        <h3 class="form-title">
+          <mat-icon>person_add</mat-icon>
+          Ajouter un artiste à l'événement
+        </h3>
+
+        <div class="add-artist-form-content">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Rechercher un artiste...</mat-label>
+            <input
+              type="text"
+              matInput
+              [formControl]="artistControl"
+              [matAutocomplete]="auto"
+              placeholder="Commencez à taper le nom..."
+            />
+            <mat-icon matPrefix>search</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onArtistSelected($event)">
+              <mat-option *ngFor="let artist of filteredArtists" [value]="artist.label">
+                <mat-icon>person</mat-icon>
+                <span>{{ artist.label }}</span>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+
+          <!-- Actions du formulaire -->
+          <div class="form-actions">
+            <button mat-button type="button" (click)="cancelAddArtist()">
+              <mat-icon>close</mat-icon>
+              Annuler
+            </button>
+            <button 
+              mat-raised-button 
+              color="primary" 
+              type="button"
+              (click)="addArtist()"
+              [disabled]="!selectedArtist">
+              <mat-icon>add</mat-icon>
+              Ajouter l'artiste
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
   </div>
 </div>

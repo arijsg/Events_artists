@@ -50,7 +50,7 @@
         <div class="artists-list" *ngIf="event.artists && event.artists.length > 0">
           <mat-chip-listbox>
             <mat-chip *ngFor="let artist of event.artists" class="artist-chip">
-              {{ artist.name }}
+              {{ artist.label }}
             </mat-chip>
           </mat-chip-listbox>
         </div>

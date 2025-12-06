@@ -1,14 +1,16 @@
-:host {
-  display: block;
-  min-height: 100vh;
-  background: radial-gradient(circle at 20% -10%, #4c1d95 0%, #1a1033 40%, #0d0b1a 100%);
-  color: #ffffff;
-  padding-bottom: 5rem;
-  overflow-x: hidden;
-  position: relative;
-}
 
-/* Halo lumineux global */
+@use '@angular/material' as mat;
+
+$primary-purple: #8b5cf6;
+$secondary-pink: #ec4899;
+$tertiary-cyan: #06b6d4; 
+$bg-dark-deep: #0d0b1a;
+$bg-light-card: #1b132a;
+$text-light: #ffffff;
+$text-secondary: rgba(255, 255, 255, 0.55);
+
+
+
 .artist-list-container {
   position: relative;
   z-index: 2;
@@ -25,9 +27,9 @@
     bottom: 0;
 
     background:
-      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(139, 92, 246, 0.35), transparent),
-      radial-gradient(ellipse 50% 30% at 20% 80%, rgba(236, 72, 153, 0.25), transparent),
-      radial-gradient(ellipse 40% 25% at 50% -10%, rgba(56, 189, 248, 0.2), transparent);
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba($primary-purple, 0.35), transparent),
+      radial-gradient(ellipse 50% 30% at 20% 80%, rgba($secondary-pink, 0.25), transparent),
+      radial-gradient(ellipse 40% 25% at 50% -10%, rgba($tertiary-cyan, 0.2), transparent);
 
     z-index: -1;
     pointer-events: none;
@@ -36,7 +38,7 @@
 }
 
 /* ===========================
-     HEADER
+    HEADER
 =========================== */
 .header-section {
   text-align: center;
@@ -54,27 +56,26 @@
   justify-content: center;
   gap: 1rem;
   color: #fff;
-  text-shadow: 0 0 25px rgba(139, 92, 246, 0.6);
-  animation: titleReveal 1s ease-out;
+  text-shadow: 0 0 25px rgba($primary-purple, 0.6); 
 
   .title-icon {
     font-size: 3rem;
     color: #a78bfa;
-    text-shadow: 0 0 20px rgba(167, 139, 250, 0.9);
+    text-shadow: 0 0 20px rgba($primary-purple, 0.9);
     animation: iconPulse 2.2s ease-in-out infinite;
   }
 }
 
 .subtitle {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.55);
+  color: $text-secondary; 
   font-weight: 400;
   letter-spacing: 1px;
   animation: fadeInUp 1s ease-out 0.3s backwards;
 }
 
 /* ===========================
-     SEARCH BAR
+    SEARCH BAR
 =========================== */
 .search-section {
   display: flex;
@@ -90,13 +91,13 @@
   .mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.06) !important;
     border-radius: 18px !important;
-    border: 1px solid rgba(167, 139, 250, 0.25) !important;
+    border: 1px solid rgba($primary-purple, 0.25) !important;
     backdrop-filter: blur(18px);
     transition: all .3s ease;
 
     &:hover {
       background: rgba(255, 255, 255, 0.1) !important;
-      border-color: rgba(167, 139, 250, 0.45) !important;
+      border-color: rgba($primary-purple, 0.45) !important;
     }
   }
 
@@ -113,12 +114,12 @@
 
   .mat-mdc-icon-button {
     color: rgba(255, 255, 255, 0.55);
-    &:hover { color: #c084fc; }
+    &:hover { color: $primary-purple; } 
   }
 }
 
 /* ===========================
-     LOADER
+    LOADER
 =========================== */
 .loading-container {
   display: flex;
@@ -134,14 +135,14 @@
 
   .loading-text {
     font-size: 1.1rem;
+    color: #c4b5fd; 
     font-weight: 500;
-    color: #c4b5fd;
     animation: pulse 1.5s ease-in-out infinite;
   }
 }
 
 /* ===========================
-     GRID
+    GRID
 =========================== */
 .artists-grid {
   display: grid;
@@ -150,12 +151,12 @@
 }
 
 /* ===========================
-     ARTIST CARD
+    ARTIST CARD
 =========================== */
 .artist-card {
-  background: linear-gradient(145deg, #1b132a, #0f0b18) !important;
+  background: linear-gradient(145deg, $bg-light-card, #0f0b1879) !important;
   border-radius: 20px !important;
-  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  border: 1px solid rgba($primary-purple, 0.2) !important;
   overflow: hidden;
   position: relative;
   transition: all .35s ease, border-color .35s ease;
@@ -168,22 +169,22 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, #8b5cf6, #ec4899, #06b6d4);
+    background: linear-gradient(90deg, $primary-purple, $secondary-pink, $tertiary-cyan); 
     opacity: 0;
     transition: opacity .35s ease;
   }
 
   &:hover {
     transform: translateY(-8px);
-    border-color: rgba(139, 92, 246, 0.45) !important;
+    border-color: rgba($primary-purple, 0.45) !important;
     box-shadow:
-      0 0 40px rgba(139, 92, 246, 0.23),
-      0 0 80px rgba(236, 72, 153, 0.18);
+      0 0 40px rgba($primary-purple, 0.23), 
+      0 0 80px rgba($secondary-pink, 0.18);
 
     &::before { opacity: 1; }
 
-    .artist-name { color: #d6ccff; }
-    .view-button { box-shadow: 0 0 25px rgba(139, 92, 246, 0.4); }
+    .artist-name { color: #d6ccff; } 
+    .view-button { box-shadow: 0 0 25px rgba($primary-purple, 0.4); } 
   }
 
   .mat-mdc-card-content {
@@ -192,7 +193,7 @@
 }
 
 /* ===========================
-     ARTIST NAME
+    ARTIST NAME
 =========================== */
 .artist-name {
   font-size: 1.6rem;
@@ -202,9 +203,7 @@
   transition: color 0.3s ease;
 }
 
-/* ===========================
-     EVENT CHIPS
-=========================== */
+
 mat-chip-set {
   display: flex;
   flex-wrap: wrap;
@@ -213,16 +212,16 @@ mat-chip-set {
 }
 
 .event-chip {
-  background: rgba(139, 92, 246, 0.2) !important;
-  border: 1px solid rgba(139, 92, 246, 0.4) !important;
-  color: #c4b5fd !important;
+  background: rgba($primary-purple, 0.2) !important;
+  border: 1px solid rgba($primary-purple, 0.4) !important; 
+  color: #c4b5fd !important; 
   font-weight: 500;
   font-size: .8rem;
   border-radius: 20px !important;
   transition: all .3s ease;
 
   &:hover {
-    background: rgba(139, 92, 246, 0.35) !important;
+    background: rgba($primary-purple, 0.35) !important;
     transform: scale(1.05);
   }
 
@@ -232,7 +231,7 @@ mat-chip-set {
 }
 
 /* ===========================
-     EMPTY EVENTS
+    EMPTY EVENTS
 =========================== */
 .no-event-text {
   color: rgba(255, 255, 255, 0.35);
@@ -242,13 +241,13 @@ mat-chip-set {
 }
 
 /* ===========================
-     BUTTON
+    BUTTON (view-button)
 =========================== */
 .view-button {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-  background: linear-gradient(135deg, #7c3aed, #a855f7) !important;
+  background: linear-gradient(135deg, #7c3aed, #a855f7) !important; // Dégradé cohérent avec Event List
   color: #fff !important;
   border: none !important;
   border-radius: 14px !important;
@@ -262,6 +261,7 @@ mat-chip-set {
     font-size: 1.1rem;
     width: 1.1rem;
     height: 1.1rem;
+    color: #fff;
     transition: transform .3s ease;
   }
 
@@ -275,7 +275,7 @@ mat-chip-set {
 }
 
 /* ===========================
-     EMPTY STATE
+    EMPTY STATE
 =========================== */
 .no-artists-card {
   background: rgba(30, 30, 40, 0.55) !important;
@@ -286,7 +286,7 @@ mat-chip-set {
 
   .empty-icon {
     font-size: 4rem;
-    color: #8b5cf6;
+    color: $primary-purple; 
     opacity: .6;
     margin-bottom: 1rem;
   }
@@ -305,7 +305,7 @@ mat-chip-set {
 }
 
 /* ===========================
-     PAGINATION
+    PAGINATION
 =========================== */
 .pagination-wrapper {
   display: flex;
@@ -314,55 +314,63 @@ mat-chip-set {
 }
 
 .custom-paginator {
-  background: rgba(30, 30, 40, 0.55) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: $primary-purple !important;
+  border: 1px solid rgba($text-light, 0.1);
   border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
   .mat-mdc-paginator-container {
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba($text-light, 0.75);
     padding: 0 12px;
   }
 
   .mat-mdc-icon-button {
-    color: rgba(255, 255, 255, 0.5);
-    &:hover { color: #a78bfa; }
-    &:disabled { color: rgba(255, 255, 255, 0.2); }
+    color: rgba($text-light, 0.5);
+    &:hover { color: $primary-purple; }
+    &:disabled { color: rgba($text-light, 0.2); }
   }
 
   .mat-mdc-select-value,
   .mat-mdc-paginator-page-size-label,
   .mat-mdc-paginator-range-label {
-    color: rgba(255, 255, 255, 0.5) !important;
+    color: rgba($text-light, 0.5) !important;
     font-size: .85rem;
+  }
+  
+  ::ng-deep button:hover:not([disabled]) {
+    background: rgba($primary-purple, 0.3); 
+    color: $text-light;
+  }
+
+  ::ng-deep .mat-mdc-icon-button .mat-icon {
+    color: $primary-purple !important;
   }
 }
 
-/* ===========================
-     ANIMATIONS
-=========================== */
+
 @keyframes titleReveal {
   from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to 	 { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to 	 { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes cardReveal {
   from { opacity: 0; transform: translateY(30px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  to 	 { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes iconPulse {
   0%, 100% { transform: scale(1); opacity: 1; }
-  50%      { transform: scale(1.13); opacity: 0.7; }
+  50% 	 { transform: scale(1.13); opacity: 0.7; }
 }
 
 @keyframes pulse {
   0%, 100% { opacity: 1; }
-  50%      { opacity: .5; }
+  50% 	 { opacity: .5; }
 }
 
 /* Délais progressifs des cartes */
@@ -373,7 +381,7 @@ mat-chip-set {
 }
 
 /* ===========================
-      RESPONSIVE
+    RESPONSIVE
 =========================== */
 @media (max-width: 768px) {
   .artist-list-container {
@@ -392,12 +400,16 @@ mat-chip-set {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===========================
+    CREATE BUTTON
+=========================== */
 .create-button {
   position: absolute;
   top: 2rem;
   right: 2rem;
-  background: linear-gradient(135deg, #7c3aed, #a855f7) !important;
-  color: white !important;
+  background: linear-gradient(135deg, #7c3aed, #a855f7) !important; 
+  color: $text-light !important;
   padding: 0.8rem 1.4rem;
   font-size: 0.95rem;
   font-weight: 600;
@@ -405,16 +417,17 @@ mat-chip-set {
   display: flex;
   align-items: center;
   gap: .5rem;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 20px rgba($primary-purple, 0.4);
   transition: all .3s ease;
 
   mat-icon {
     font-size: 1.2rem;
+    color: $text-light;
   }
 
   &:hover {
     transform: translateY(-4px) scale(1.03);
-    box-shadow: 0 0 35px rgba(167, 139, 250, 0.65);
+    box-shadow: 0 0 35px rgba($primary-purple, 0.65);
   }
 }
 .search-info {
@@ -424,20 +437,20 @@ mat-chip-set {
 }
 
 .search-result-text {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba($text-light, 0.85);
   font-size: 1rem;
   font-weight: 500;
-  background: rgba(139, 92, 246, 0.2);
+  background: rgba($primary-purple, 0.2); 
   padding: 1rem 2rem;
   border-radius: 14px;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid rgba(139, 92, 246, 0.4);
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba($primary-purple, 0.4);
+  box-shadow: 0 4px 15px rgba($primary-purple, 0.15);
 
   mat-icon {
     font-size: 1.2rem;
-    color: #a78bfa;
+    color: $primary-purple; 
   }
 }

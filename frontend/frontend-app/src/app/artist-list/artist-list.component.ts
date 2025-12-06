@@ -48,7 +48,7 @@ export class ArtistListComponent implements OnInit {
   filteredArtists: Artist[] = [];   // Résultats de recherche
 
   currentPage = 0;
-  pageSize = 10;
+  pageSize = 6;
   totalPages = 1;
   totalElements = 0;
 

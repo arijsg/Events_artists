@@ -1,7 +1,21 @@
+// event-detail.component.scss - Version Harmonisée (Cosmic Dark / Violet Néon)
+
+// Variables pour la cohérence
+$primary-purple: #8b5cf6; 
+$secondary-pink: #ec4899; 
+$tertiary-cyan: #06b6d4; 
+$bg-dark-deep: #0d0b1a; 
+$bg-light-card: #1b132a; 
+$text-light: #ffffff;
+$text-secondary: #94a3b8;
+$error-red: #dc2626;
+$success-green: #10b981;
+
 :host {
   display: block;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  // Fond Cosmique harmonisé
+  background: radial-gradient(circle at 20% -10%, #4c1d95 0%, #1a1033 40%, $bg-dark-deep 100%);
   background-attachment: fixed;
 }
 
@@ -13,24 +27,25 @@
   min-height: 100vh;
 }
 
-// ===== BOUTON RETOUR =====
+// ===== BOUTON RETOUR (CORRIGÉ : descend la flèche) =====
 .back-button {
   position: fixed;
-  top: 2rem;
+  top: 5rem; /* Augmenté pour éviter la navbar */
   left: 2rem;
-  background: white !important;
-  color: #dc2626 !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: $bg-light-card !important; /* Fond sombre */
+  color: $primary-purple !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   z-index: 100;
   transition: all 0.3s ease;
+  border: 1px solid rgba($primary-purple, 0.4);
 
   &:hover {
     transform: translateX(-5px);
-    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+    box-shadow: 0 6px 20px rgba($primary-purple, 0.5);
   }
 
   mat-icon {
-    color: #dc2626;
+    color: $primary-purple;
   }
 }
 
@@ -44,7 +59,7 @@
   gap: 1.5rem;
 
   .loading-text {
-    color: white;
+    color: $text-secondary;
     font-size: 1.2rem;
     font-weight: 500;
   }
@@ -52,10 +67,12 @@
 
 // ===== ERREUR CARD =====
 .error-card {
-  background: rgba(255, 255, 255, 0.95) !important;
+  // Adaptation Dark Mode
+  background: rgba($bg-light-card, 0.95) !important;
   border-radius: 16px !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
   animation: fadeIn 0.5s ease;
+  border: 1px solid rgba($error-red, 0.3);
 
   .error-content {
     display: flex;
@@ -67,16 +84,16 @@
       font-size: 4rem;
       width: 4rem;
       height: 4rem;
-      color: #dc2626;
+      color: $error-red;
     }
 
     h2 {
-      color: #dc2626;
+      color: $text-light;
       margin: 0 0 0.5rem 0;
     }
 
     p {
-      color: #64748b;
+      color: $text-secondary;
       margin: 0 0 1rem 0;
     }
   }
@@ -89,14 +106,16 @@
 
 // ===== HEADER CARD =====
 .event-header-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%) !important;
+  // Adaptation Dark Mode
+  background: rgba($bg-light-card, 0.95) !important;
   backdrop-filter: blur(10px);
   border-radius: 20px !important;
   box-shadow: 
-    0 8px 30px rgba(220, 38, 38, 0.2),
-    0 0 0 1px rgba(236, 72, 153, 0.1) !important;
+    0 8px 30px rgba($primary-purple, 0.2),
+    0 0 0 1px rgba($primary-purple, 0.1) !important;
   margin-bottom: 2rem;
   overflow: visible !important;
+  border: 1px solid rgba($primary-purple, 0.3);
 
   ::ng-deep .mat-mdc-card-content {
     padding: 2rem !important;
@@ -119,7 +138,8 @@
     font-size: 3rem;
     width: 3rem;
     height: 3rem;
-    background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%);
+    // Dégradé néon
+    background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -128,7 +148,8 @@
   .event-title {
     font-size: 2.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%);
+    // Dégradé néon
+    background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -142,23 +163,26 @@
   gap: 1rem;
 
   .edit-button {
-    background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%) !important;
+    // Bouton primaire harmonisé
+    background: linear-gradient(135deg, $primary-purple 0%, #a855f7 100%) !important;
     color: white !important;
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+    box-shadow: 0 4px 15px rgba($primary-purple, 0.3);
 
     &:hover {
       transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+      box-shadow: 0 6px 20px rgba($primary-purple, 0.4);
     }
   }
 
   .delete-button {
-    background: linear-gradient(135deg, #991b1b 0%, #be123c 100%) !important;
-    box-shadow: 0 4px 15px rgba(153, 27, 27, 0.3);
+    // Bouton de danger harmonisé
+    background: linear-gradient(135deg, $error-red 0%, #991b1b 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba($error-red, 0.3);
 
     &:hover {
       transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(153, 27, 27, 0.4);
+      box-shadow: 0 6px 20px rgba($error-red, 0.4);
     }
   }
 }
@@ -174,21 +198,22 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem 1.5rem;
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+    // Fond transparent sur accent
+    background: rgba($primary-purple, 0.05);
     border-radius: 12px;
-    border: 2px solid rgba(220, 38, 38, 0.1);
+    border: 2px solid rgba($primary-purple, 0.2);
 
     mat-icon {
       font-size: 2rem;
       width: 2rem;
       height: 2rem;
-      color: #dc2626;
+      color: $tertiary-cyan; // Cyan pour l'icône
     }
 
     .date-label {
       display: block;
       font-size: 0.875rem;
-      color: #64748b;
+      color: $text-secondary;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -197,7 +222,7 @@
     .date-value {
       display: block;
       font-size: 1.125rem;
-      color: #1e293b;
+      color: $text-light;
       font-weight: 700;
     }
   }
@@ -219,7 +244,7 @@
   }
 
   .form-error {
-    color: #dc2626;
+    color: $error-red;
     font-size: 0.875rem;
     margin: 0.5rem 0;
     display: block;
@@ -242,11 +267,21 @@
     }
 
     .mat-mdc-text-field-wrapper {
-      background: white;
+      background: $bg-light-card; /* Fond de champ sombre */
+      border: 1px solid rgba($primary-purple, 0.2);
+    }
+    
+    // Texte et labels des champs
+    .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+        color: $text-light;
+    }
+    
+    .mat-mdc-text-field-wrapper .mat-mdc-floating-label {
+        color: $text-secondary;
     }
 
     .mat-primary .mat-pseudo-checkbox-checked {
-      background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%);
+      background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%);
     }
   }
 }
@@ -254,17 +289,19 @@
 // ===== DIVIDER =====
 .section-divider {
   margin: 2rem 0;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba($text-light, 0.3) !important;
 }
 
 // ===== CARTE DES ARTISTES =====
 .artists-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%) !important;
+  // Adaptation Dark Mode
+  background: rgba($bg-light-card, 0.95) !important;
   backdrop-filter: blur(10px);
   border-radius: 20px !important;
   box-shadow: 
-    0 8px 30px rgba(220, 38, 38, 0.2),
-    0 0 0 1px rgba(236, 72, 153, 0.1) !important;
+    0 8px 30px rgba($primary-purple, 0.2),
+    0 0 0 1px rgba($primary-purple, 0.1) !important;
+  border: 1px solid rgba($primary-purple, 0.3);
 
   ::ng-deep .mat-mdc-card-header {
     padding: 1.5rem 1.5rem 0 1.5rem !important;
@@ -281,7 +318,8 @@
   gap: 0.75rem;
   font-size: 1.5rem !important;
   font-weight: 700 !important;
-  background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%);
+  // Dégradé néon
+  background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -290,7 +328,8 @@
     font-size: 2rem;
     width: 2rem;
     height: 2rem;
-    background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%);
+    // Dégradé néon
+    background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -298,7 +337,7 @@
 
   .artist-count {
     font-size: 1.25rem;
-    color: #64748b;
+    color: $text-secondary;
   }
 }
 
@@ -311,12 +350,12 @@
     font-size: 5rem;
     width: 5rem;
     height: 5rem;
-    color: #cbd5e0;
+    color: $text-secondary;
     margin: 0 auto 1rem;
   }
 
   p {
-    color: #64748b;
+    color: $text-secondary;
     font-size: 1.125rem;
     margin-bottom: 1.5rem;
   }
@@ -332,12 +371,14 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .artist-chip {
-    background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%) !important;
-    border: 2px solid rgba(220, 38, 38, 0.2) !important;
-    color: #1e293b !important;
+    // Fond harmonisé transparent sur accent
+    background: rgba($primary-purple, 0.05) !important;
+    border: 2px solid rgba($primary-purple, 0.2) !important;
+    color: $text-light !important;
     font-weight: 600 !important;
     font-size: 1rem !important;
     padding: 0.75rem 1rem !important;
@@ -347,39 +388,80 @@
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
-      background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%) !important;
+      box-shadow: 0 4px 12px rgba($primary-purple, 0.2);
+      background: rgba($primary-purple, 0.1) !important;
     }
 
     ::ng-deep .mat-mdc-chip-action-label {
-      color: #1e293b !important;
+      color: $text-light !important;
     }
 
     mat-icon {
-      color: #dc2626 !important;
+      color: $tertiary-cyan !important; // Icône Cyan
     }
   }
 
   .add-artist-button {
     align-self: flex-start;
-    background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%) !important;
+     margin-top: 2rem !important;
+    background: linear-gradient(135deg, $primary-purple 0%, #a855f7 100%) !important;
     color: white !important;
     border-radius: 25px !important;
     padding: 0.75rem 1.5rem !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+    box-shadow: 0 4px 15px rgba($primary-purple, 0.3);
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+      box-shadow: 0 6px 20px rgba($primary-purple, 0.4);
     }
+  }
+}
+
+// ===== CARTE AJOUT ARTISTE =====
+.add-artist-card {
+  // Adaptation Dark Mode
+  background: rgba($bg-light-card, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 20px !important;
+  box-shadow: 
+    0 8px 30px rgba($primary-purple, 0.2),
+    0 0 0 1px rgba($primary-purple, 0.1) !important;
+  animation: slideDown 0.4s ease;
+  margin-top: 2rem;
+  border: 1px solid rgba($primary-purple, 0.3);
+
+  .form-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    // Dégradé néon
+    background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+
+    mat-icon {
+      // Dégradé néon
+      background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+
+  ::ng-deep .mat-mdc-card-content {
+    padding: 2rem !important;
   }
 }
 
 // ===== SNACKBAR PERSONNALISÉ =====
 ::ng-deep {
   .success-snackbar {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    background: linear-gradient(135deg, $success-green 0%, #059669 100%) !important;
     color: white !important;
 
     .mat-mdc-button {
@@ -388,7 +470,7 @@
   }
 
   .error-snackbar {
-    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important;
+    background: linear-gradient(135deg, $error-red 0%, #991b1b 100%) !important;
     color: white !important;
 
     .mat-mdc-button {
@@ -397,7 +479,7 @@
   }
 }
 
-// ===== ANIMATIONS =====
+// ===== ANIMATIONS & RESPONSIVE (Inchangé) =====
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -425,7 +507,6 @@
   }
 }
 
-// ===== RESPONSIVE =====
 @media (max-width: 768px) {
   .event-detail-container {
     padding: 1rem;

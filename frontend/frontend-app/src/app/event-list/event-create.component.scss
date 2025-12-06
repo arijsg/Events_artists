@@ -1,7 +1,19 @@
+
+@use '@angular/material' as mat;
+
+$primary-purple: #8b5cf6; 
+$secondary-pink: #ec4899; 
+$bg-dark-deep: #0d0b1a; 
+$bg-light-card: #1b132a; 
+$text-light: #ffffff;
+$text-secondary: #94a3b8;
+$error-red: #dc2626;
+$success-green: #10b981; 
+
 :host {
   display: block;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: radial-gradient(circle at 20% -10%, #4c1d95 0%, #1a1033 40%, $bg-dark-deep 100%);
   background-attachment: fixed;
 }
 
@@ -13,36 +25,36 @@
   position: relative;
 }
 
-// ===== BOUTON RETOUR =====
 .back-button {
   position: fixed;
-  top: 2rem;
+  top: 5rem; 
   left: 2rem;
-  background: white !important;
-  color: #dc2626 !important;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  background: $bg-light-card !important;
+  color: $primary-purple !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   z-index: 100;
   transition: all 0.3s ease;
+  border: 1px solid rgba($primary-purple, 0.4);
 
   &:hover {
     transform: translateX(-5px);
-    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3);
+    box-shadow: 0 6px 20px rgba($primary-purple, 0.5);
   }
 
   mat-icon {
-    color: #dc2626;
+    color: $primary-purple;
   }
 }
 
-// ===== CARTE FORMULAIRE =====
 .form-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%) !important;
+  background: rgba($bg-light-card, 0.95) !important;
   backdrop-filter: blur(10px);
   border-radius: 20px !important;
   box-shadow: 
-    0 8px 30px rgba(220, 38, 38, 0.2),
-    0 0 0 1px rgba(236, 72, 153, 0.1) !important;
+    0 8px 30px rgba($primary-purple, 0.2),
+    0 0 0 1px rgba($primary-purple, 0.1) !important;
   animation: fadeInUp 0.6s ease;
+  border: 1px solid rgba($primary-purple, 0.3);
 
   ::ng-deep .mat-mdc-card-header {
     padding: 2rem 2rem 0 2rem !important;
@@ -53,14 +65,13 @@
   }
 }
 
-// ===== TITRE =====
 .form-title {
   display: flex;
   align-items: center;
   gap: 1rem;
   font-size: 2rem !important;
   font-weight: 700 !important;
-  background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%);
+  background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -70,14 +81,13 @@
     font-size: 2.5rem;
     width: 2.5rem;
     height: 2.5rem;
-    background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%);
+    background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 }
 
-// ===== LOADING =====
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -87,12 +97,11 @@
   gap: 1rem;
 
   p {
-    color: #64748b;
+    color: $text-secondary;
     font-size: 1rem;
   }
 }
 
-// ===== FORMULAIRE =====
 form {
   display: flex;
   flex-direction: column;
@@ -110,57 +119,68 @@ form {
   }
 
   .form-error {
-    color: #dc2626;
+    color: $error-red;
     font-size: 0.875rem;
     margin: -0.5rem 0 0.5rem 0;
     display: block;
     padding: 0.5rem;
-    background: rgba(220, 38, 38, 0.05);
+    background: rgba($error-red, 0.05);
     border-radius: 8px;
-    border-left: 3px solid #dc2626;
+    border-left: 3px solid $error-red;
   }
 
   ::ng-deep {
     .mat-mdc-form-field {
       .mat-mdc-text-field-wrapper {
-        background: white;
+        background: $bg-light-card;
+        border: 1px solid rgba($primary-purple, 0.2);
+      }
+      
+      .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+          color: $text-light !important;
+          caret-color: $text-light;
+      }
+      .mat-mdc-text-field-wrapper .mat-mdc-floating-label {
+          color: $text-secondary !important;
       }
 
       .mat-mdc-form-field-error {
-        color: #dc2626;
+        color: $error-red;
       }
     }
 
-    // Couleur primaire personnalisée
     .mat-primary {
-      --mdc-filled-text-field-caret-color: #dc2626;
-      --mdc-filled-text-field-focus-active-indicator-color: #dc2626;
-      --mdc-filled-text-field-focus-label-text-color: #dc2626;
+      --mdc-filled-text-field-caret-color: $primary-purple;
+      --mdc-filled-text-field-focus-active-indicator-color: $primary-purple;
+      --mdc-filled-text-field-focus-label-text-color: $primary-purple;
     }
 
-    // Datepicker
     .mat-datepicker-toggle {
-      color: #dc2626;
+      color: $primary-purple;
     }
 
-    // Select multiple
     .mat-mdc-option {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-
+      background: $bg-light-card; 
+      color: $text-light;
+      
       mat-icon {
-        color: #dc2626;
+        color: $primary-purple;
       }
 
       &.mdc-list-item--selected {
-        background: rgba(220, 38, 38, 0.1);
+        background: rgba($primary-purple, 0.2);
+      }
+      
+      .mdc-list-item__primary-text {
+          color: $text-light;
       }
     }
   }
 }
 
-// ===== ACTIONS =====
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -177,14 +197,14 @@ form {
     justify-content: center;
 
     &[type="submit"] {
-      background: linear-gradient(135deg, #dc2626 0%, #ec4899 100%) !important;
+      background: linear-gradient(135deg, $primary-purple 0%, #a855f7 100%) !important;
       color: white !important;
-      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+      box-shadow: 0 4px 15px rgba($primary-purple, 0.3);
       flex: 1;
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        box-shadow: 0 6px 20px rgba($primary-purple, 0.4);
       }
 
       &:disabled {
@@ -194,11 +214,12 @@ form {
     }
 
     &[type="button"] {
-      background: #f1f5f9 !important;
-      color: #64748b !important;
+      background: $bg-light-card !important;
+      color: $text-secondary !important;
+      border: 1px solid rgba($primary-purple, 0.2);
 
       &:hover {
-        background: #e2e8f0 !important;
+        background: rgba($bg-light-card, 0.8) !important;
       }
     }
   }
@@ -215,7 +236,7 @@ form {
 // ===== SNACKBAR =====
 ::ng-deep {
   .success-snackbar {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    background: linear-gradient(135deg, $success-green 0%, #059669 100%) !important;
     color: white !important;
 
     .mat-mdc-button {
@@ -224,7 +245,7 @@ form {
   }
 
   .error-snackbar {
-    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%) !important;
+    background: linear-gradient(135deg, $error-red 0%, #991b1b 100%) !important;
     color: white !important;
 
     .mat-mdc-button {

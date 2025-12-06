@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 // Angular Material imports
@@ -11,12 +11,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 interface Artist {
   id: string;
@@ -37,6 +38,7 @@ interface Event {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -48,7 +50,9 @@ interface Event {
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatAutocompleteModule,
+    MatOptionModule
   ],
   templateUrl: './event-detail.component.html',
   styleUrls: ['./event-detail.component.scss']
@@ -59,6 +63,13 @@ export class EventDetailComponent implements OnInit {
   isLoading = false;
   isEditing = false;
   errorMessage: string | null = null;
+  
+  // Gestion des artistes
+  showAddArtistForm = false;
+  artistControl = new FormControl('');
+  filteredArtists: Artist[] = [];
+  selectedArtist: Artist | null = null;
+  allArtists: Artist[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -79,6 +90,16 @@ export class EventDetailComponent implements OnInit {
     if (id) {
       this.loadEvent(id);
     }
+
+    // Charger tous les artistes
+    this.loadArtists();
+
+    // Filtrer les artistes selon la saisie
+    this.artistControl.valueChanges.subscribe(value => {
+      this.filteredArtists = this.allArtists.filter(a =>
+        a.label.toLowerCase().includes((value || '').toLowerCase())
+      );
+    });
   }
 
   // Validator personnalisé pour vérifier que endDate > startDate
@@ -92,6 +113,23 @@ export class EventDetailComponent implements OnInit {
     return null;
   }
 
+  // Charger tous les artistes pour l'autocomplete
+  loadArtists() {
+    this.http.get<any>(`http://localhost:8080/artists?size=100`).subscribe({
+      next: (response) => {
+        // Gérer la réponse paginée ou directe
+        this.allArtists = response.content || response;
+        this.filteredArtists = this.allArtists;
+        console.log('Artistes chargés:', this.allArtists.length);
+      },
+      error: (err) => {
+        console.error('Erreur chargement artistes:', err);
+        this.showNotification('Impossible de charger les artistes', 'error');
+      }
+    });
+  }
+
+  // Charger l'événement
   loadEvent(id: string) {
     this.isLoading = true;
     this.errorMessage = null;
@@ -105,6 +143,7 @@ export class EventDetailComponent implements OnInit {
           endDate: event.endDate
         });
         this.isLoading = false;
+        console.log('Événement chargé:', event);
       },
       error: (error) => {
         this.isLoading = false;
@@ -172,42 +211,116 @@ export class EventDetailComponent implements OnInit {
     }
   }
 
-  // Convertir Date en string YYYY-MM-DD
-  formatDateForAPI(date: any): string {
-    if (typeof date === 'string') {
-      return date;
-    }
-    if (date instanceof Date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-    return date;
+  // Gestion des artistes - OUVRIR FORMULAIRE
+  openAddArtistForm() {
+    console.log('=== Ouverture formulaire ajout artiste ===');
+    console.log('Artistes disponibles:', this.allArtists.length);
+    console.log('AVANT - showAddArtistForm:', this.showAddArtistForm);
+    this.showAddArtistForm = true;
+    console.log('APRÈS - showAddArtistForm:', this.showAddArtistForm);
+    
+    // Vérifier l'état après un court délai
+    setTimeout(() => {
+      console.log('VÉRIFICATION - showAddArtistForm est maintenant:', this.showAddArtistForm);
+      console.log('Le formulaire DEVRAIT être visible. Si ce n\'est pas le cas, il y a un problème Angular.');
+    }, 100);
   }
 
+  // Gestion des artistes - ANNULER
+  cancelAddArtist() {
+    console.log('=== Annulation ajout artiste ===');
+    this.showAddArtistForm = false;
+    this.selectedArtist = null;
+    this.artistControl.setValue('');
+  }
+
+  // Gestion des artistes - SÉLECTION
+  onArtistSelected(event: any) {
+    const label = event.option.value;
+    this.selectedArtist = this.allArtists.find(a => a.label === label) || null;
+    console.log('=== Artiste sélectionné ===');
+    console.log('Label recherché:', label);
+    console.log('Artiste trouvé:', this.selectedArtist);
+    console.log('Tous les artistes:', this.allArtists);
+  }
+
+  // Gestion des artistes - AJOUTER
+  addArtist() {
+    console.log('🚀 === DÉBUT ADDARTIST ===');
+    
+    if (!this.event || !this.selectedArtist) {
+      console.log('❌ Pas d\'événement ou d\'artiste sélectionné');
+      this.showNotification('Veuillez sélectionner un artiste', 'error');
+      return;
+    }
+
+    // Vérifier que l'artiste n'est pas déjà dans la liste
+    const artistExists = this.event.artists.some(a => a.id === this.selectedArtist!.id);
+    if (artistExists) {
+      console.log('❌ Artiste déjà présent');
+      this.showNotification('Cet artiste participe déjà à l\'événement', 'error');
+      return;
+    }
+
+    console.log('=== AJOUT ARTISTE VIA API DÉDIÉE ===');
+    console.log('Event ID:', this.event.id);
+    console.log('Artist ID:', this.selectedArtist.id);
+    console.log('URL:', `http://localhost:8080/events/${this.event.id}/artists/${this.selectedArtist.id}`);
+
+    // Utiliser la route POST dédiée
+    this.http.post(`http://localhost:8080/events/${this.event.id}/artists/${this.selectedArtist.id}`, {})
+      .subscribe({
+        next: () => {
+          console.log('=== SUCCÈS ===');
+          console.log('Artiste ajouté avec succès via l\'API');
+          
+          // Ajouter l'artiste localement pour mise à jour immédiate
+          this.event!.artists.push({
+            id: this.selectedArtist!.id,
+            label: this.selectedArtist!.label
+          });
+          
+          this.showNotification('Artiste ajouté avec succès !', 'success');
+          this.cancelAddArtist();
+        },
+        error: (err) => {
+          console.error('=== ERREUR SERVEUR ===');
+          console.error('Status:', err.status);
+          console.error('Message:', err.message);
+          console.error('Détails:', err.error);
+          this.showNotification('Erreur lors de l\'ajout de l\'artiste', 'error');
+        }
+      });
+  }
+
+  // Gestion des artistes - RETIRER
   removeArtist(artistId: string) {
     if (this.event && confirm('Voulez-vous vraiment retirer cet artiste de l\'événement ?')) {
-      // Mettre à jour l'événement en retirant l'artiste
-      const updatedEvent = {
-        ...this.event,
-        artists: this.event.artists.filter(a => a.id !== artistId)
-      };
-
-      this.http.put<Event>(`http://localhost:8080/events/${this.event.id}`, updatedEvent)
+      console.log('=== RETRAIT ARTISTE VIA API DÉDIÉE ===');
+      console.log('Event ID:', this.event.id);
+      console.log('Artist ID:', artistId);
+      
+      // Utiliser la route DELETE dédiée
+      this.http.delete(`http://localhost:8080/events/${this.event.id}/artists/${artistId}`)
         .subscribe({
-          next: (response) => {
-            this.event = response;
+          next: () => {
+            console.log('=== SUCCÈS ===');
+            console.log('Artiste retiré avec succès via l\'API');
+            
+            // Retirer l'artiste localement pour mise à jour immédiate
+            this.event!.artists = this.event!.artists.filter(a => a.id !== artistId);
+            
             this.showNotification('Artiste retiré avec succès', 'success');
           },
           error: (error) => {
-            console.error('Erreur:', error);
+            console.error('=== ERREUR ===', error);
             this.showNotification('Erreur lors du retrait de l\'artiste', 'error');
           }
         });
     }
   }
 
+  // Supprimer l'événement
   deleteEvent() {
     if (this.event && confirm('Voulez-vous vraiment supprimer cet événement ? Cette action est irréversible.')) {
       this.isLoading = true;
@@ -239,6 +352,20 @@ export class EventDetailComponent implements OnInit {
 
   goBack() {
     this.router.navigate(['/events']);
+  }
+
+  // Convertir Date en string YYYY-MM-DD
+  formatDateForAPI(date: any): string {
+    if (typeof date === 'string') {
+      return date;
+    }
+    if (date instanceof Date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    return date;
   }
 
   formatDate(dateString: string): string {

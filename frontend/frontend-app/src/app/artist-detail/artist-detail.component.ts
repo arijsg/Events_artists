@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -13,11 +12,21 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
 
 // Models
-import { Artist } from '../models/artist.model';
-import { Event } from '../models/artist.model';
+interface Event {
+  id: string;
+  label: string;
+  startDate: string;
+  endDate: string;
+}
+
+interface Artist {
+  id: string;
+  label: string;
+  events?: Event[];
+}
 
 @Component({
   selector: 'app-artist-detail',
@@ -35,7 +44,7 @@ import { Event } from '../models/artist.model';
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatChipsModule
   ],
   templateUrl: './artist-detail.component.html',
   styleUrls: ['./artist-detail.component.scss']
@@ -84,8 +93,12 @@ export class ArtistDetailComponent implements OnInit {
             }
           });
       },
-      error: () => {
-        this.errorMessage = "Artiste introuvable (404).";
+      error: (error) => {
+        if (error.status === 404) {
+          this.errorMessage = "Artiste introuvable (404).";
+        } else {
+          this.errorMessage = "Erreur lors du chargement de l'artiste.";
+        }
         this.isLoading = false;
       }
     });
@@ -96,7 +109,8 @@ export class ArtistDetailComponent implements OnInit {
     if (!this.artist) return;
     if (this.artist.label.trim().length < 3) {
       this.snackBar.open("Le nom doit contenir au moins 3 caractères.", "Fermer", {
-        duration: 3000
+        duration: 3000,
+        panelClass: ['error-snackbar']
       });
       return;
     }
@@ -107,11 +121,17 @@ export class ArtistDetailComponent implements OnInit {
       label: this.artist.label
     }).subscribe({
       next: () => {
-        this.snackBar.open("Artiste mis à jour avec succès.", "Fermer", { duration: 3000 });
+        this.snackBar.open("Artiste mis à jour avec succès.", "Fermer", { 
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
         this.isSaving = false;
       },
       error: () => {
-        this.snackBar.open("Erreur lors de la mise à jour.", "Fermer", { duration: 3000 });
+        this.snackBar.open("Erreur lors de la mise à jour.", "Fermer", { 
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
         this.isSaving = false;
       }
     });
@@ -130,7 +150,10 @@ export class ArtistDetailComponent implements OnInit {
 
     this.http.delete(`http://localhost:8080/artists/${this.artist.id}`).subscribe({
       next: () => {
-        this.snackBar.open("Artiste supprimé avec succès.", "Fermer", { duration: 3000 });
+        this.snackBar.open("Artiste supprimé avec succès.", "Fermer", { 
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
         this.isSaving = false;
         
         // Redirection vers la liste des artistes
@@ -145,9 +168,23 @@ export class ArtistDetailComponent implements OnInit {
         } else if (err.status === 500) {
           errorMsg = "Erreur serveur lors de la suppression.";
         }
-        this.snackBar.open(errorMsg, "Fermer", { duration: 3000 });
+        this.snackBar.open(errorMsg, "Fermer", { 
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
         this.isSaving = false;
       }
+    });
+  }
+
+  // Formater les dates
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR', { 
+      day: 'numeric', 
+      month: 'short',
+      year: 'numeric' 
     });
   }
 }

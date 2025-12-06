@@ -127,42 +127,62 @@ export class EventCreateComponent implements OnInit {
       const formValue = this.eventForm.value;
       const selectedArtistIds = formValue.artistIds || [];
 
-      // Préparer les artistes au format attendu
-      const artistsData = selectedArtistIds.map((artistId: string) => {
-        const artist = this.artists.find(a => a.id === artistId);
-        return {
-          id: artistId,
-          label: artist?.label || ''
-        };
-      });
-
-      // Préparer les données de l'événement
+      // ÉTAPE 1: Créer l'événement SANS les artistes
       const eventData = {
         label: formValue.label,
         startDate: this.formatDateForAPI(formValue.startDate),
-        endDate: this.formatDateForAPI(formValue.endDate),
-        artists: artistsData
+        endDate: this.formatDateForAPI(formValue.endDate)
       };
 
-      console.log('Données envoyées:', eventData);
+      console.log('=== CRÉATION ÉVÉNEMENT ===');
+      console.log('1. Données événement:', eventData);
+      console.log('2. Artistes à ajouter:', selectedArtistIds);
 
       // Créer l'événement
-      this.http.post('http://localhost:8080/events', eventData).subscribe({
-        next: (response) => {
-          console.log('Événement créé:', response);
-          this.isSubmitting = false;
-          this.snackBar.open('Événement créé avec succès !', 'Fermer', { 
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
+      this.http.post<any>('http://localhost:8080/events', eventData).subscribe({
+        next: async (createdEvent) => {
+          console.log('✅ Événement créé:', createdEvent);
+          
+          // ÉTAPE 2: Ajouter les artistes un par un via l'API dédiée
+          if (selectedArtistIds.length > 0) {
+            console.log(`=== AJOUT DE ${selectedArtistIds.length} ARTISTE(S) ===`);
+            
+            try {
+              // Ajouter chaque artiste séquentiellement
+              for (const artistId of selectedArtistIds) {
+                await this.addArtistToEvent(createdEvent.id, artistId);
+              }
+              
+              console.log('✅ Tous les artistes ont été ajoutés');
+              this.isSubmitting = false;
+              this.snackBar.open('Événement créé avec tous les artistes !', 'Fermer', { 
+                duration: 3000,
+                panelClass: ['success-snackbar']
+              });
+              
+            } catch (error) {
+              console.error('⚠️ Erreur lors de l\'ajout des artistes:', error);
+              this.isSubmitting = false;
+              this.snackBar.open('Événement créé mais erreur lors de l\'ajout des artistes', 'Fermer', { 
+                duration: 4000,
+                panelClass: ['error-snackbar']
+              });
+            }
+          } else {
+            this.isSubmitting = false;
+            this.snackBar.open('Événement créé avec succès !', 'Fermer', { 
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+          }
           
           // Rediriger vers la liste des événements
           setTimeout(() => {
             this.router.navigate(['/events']);
-          }, 1000);
+          }, 1500);
         },
         error: (error) => {
-          console.error('Erreur création événement:', error);
+          console.error('❌ Erreur création événement:', error);
           this.isSubmitting = false;
           
           let errorMessage = 'Erreur lors de la création de l\'événement';
@@ -186,6 +206,25 @@ export class EventCreateComponent implements OnInit {
         panelClass: ['error-snackbar']
       });
     }
+  }
+
+  // Méthode pour ajouter un artiste à un événement
+  private addArtistToEvent(eventId: string, artistId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      console.log(`  → Ajout artiste ${artistId} à l'événement ${eventId}`);
+      
+      this.http.post(`http://localhost:8080/events/${eventId}/artists/${artistId}`, {})
+        .subscribe({
+          next: () => {
+            console.log(`  ✅ Artiste ${artistId} ajouté`);
+            resolve();
+          },
+          error: (err) => {
+            console.error(`  ❌ Erreur ajout artiste ${artistId}:`, err);
+            reject(err);
+          }
+        });
+    });
   }
 
   goBack() {

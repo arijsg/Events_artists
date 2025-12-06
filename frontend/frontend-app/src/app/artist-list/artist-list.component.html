@@ -17,14 +17,17 @@
 
   <!-- Barre de recherche -->
   <div class="search-section">
-    <mat-form-field appearance="outline">
-      <mat-label>Rechercher un artiste...</mat-label>
-      <input matInput [(ngModel)]="searchQuery" (input)="onSearch()" />
-      <button matSuffix mat-icon-button *ngIf="searchQuery" (click)="clearSearch()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-  </div>
+  <mat-form-field appearance="outline">
+    <mat-icon matPrefix>search</mat-icon> 
+    
+    <mat-label>Rechercher un artiste...</mat-label>
+    <input matInput [(ngModel)]="searchQuery" (input)="onSearch()" />
+    
+    <button matSuffix mat-icon-button *ngIf="searchQuery" (click)="clearSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
   <!-- Loading Spinner -->
   <div class="loading-container" *ngIf="isLoading">
     <mat-spinner diameter="60"></mat-spinner>
@@ -84,22 +87,22 @@
   </mat-card>
 
   <!-- Pagination -->
-  <div class="pagination-wrapper" *ngIf="!isLoading && !isSearching && totalPages > 1">
-    <mat-paginator
-      [length]="totalElements"
-      [pageSize]="pageSize"
-      [pageIndex]="currentPage"
-      [pageSizeOptions]="[10]"
-      (page)="handlePageEvent($event)"
-      showFirstLastButtons
-      class="custom-paginator"
-    >
-    </mat-paginator>
-    <div class="search-info" *ngIf="isSearching && artists.length > 0">
-    <p class="search-result-text">
+  <div class="search-info" *ngIf="isSearching && artists.length > 0">
+  <p class="search-result-text">
     <mat-icon>search</mat-icon>
     {{ artists.length }} artiste(s) trouvé(s) pour "{{ searchQuery }}"
   </p>
 </div>
-  </div>
+<div class="pagination-wrapper" *ngIf="!isLoading && !isSearching && totalPages > 1">
+  <mat-paginator
+    [length]="totalElements"
+    [pageSize]="pageSize"
+    [pageIndex]="currentPage"
+    [pageSizeOptions]="[6, 12, 24, 48]"
+    (page)="handlePageEvent($event)"
+    showFirstLastButtons
+    class="custom-paginator"
+  >
+  </mat-paginator>
+</div>
 </div>
