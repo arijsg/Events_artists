@@ -1,0 +1,323 @@
+
+@use '@angular/material' as mat;
+
+$primary-purple: #8b5cf6; 
+$secondary-pink: #ec4899; 
+$bg-dark-deep: #0d0b1a; 
+$bg-light-card: #1b132a; 
+$text-light: #ffffff;
+$text-secondary: #94a3b8;
+$error-red: #dc2626;
+$success-green: #10b981; 
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% -10%, #4c1d95 0%, #1a1033 40%, $bg-dark-deep 100%);
+  background-attachment: fixed;
+}
+
+.create-event-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  position: relative;
+}
+
+.back-button {
+  position: fixed;
+  top: 5rem; 
+  left: 2rem;
+  background: $bg-light-card !important;
+  color: $primary-purple !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  transition: all 0.3s ease;
+  border: 1px solid rgba($primary-purple, 0.4);
+
+  &:hover {
+    transform: translateX(-5px);
+    box-shadow: 0 6px 20px rgba($primary-purple, 0.5);
+  }
+
+  mat-icon {
+    color: $primary-purple;
+  }
+}
+
+.form-card {
+  background: rgba($bg-light-card, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 20px !important;
+  box-shadow: 
+    0 8px 30px rgba($primary-purple, 0.2),
+    0 0 0 1px rgba($primary-purple, 0.1) !important;
+  animation: fadeInUp 0.6s ease;
+  border: 1px solid rgba($primary-purple, 0.3);
+
+  ::ng-deep .mat-mdc-card-header {
+    padding: 2rem 2rem 0 2rem !important;
+  }
+
+  ::ng-deep .mat-mdc-card-content {
+    padding: 2rem !important;
+  }
+}
+
+.form-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  justify-content: center;
+
+  .title-icon {
+    font-size: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, $primary-purple 0%, $secondary-pink 100%); 
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+
+  p {
+    color: $text-secondary;
+    font-size: 1rem;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: slideDown 0.4s ease;
+
+  .full-width {
+    width: 100%;
+  }
+
+  .date-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-error {
+    color: $error-red;
+    font-size: 0.875rem;
+    margin: -0.5rem 0 0.5rem 0;
+    display: block;
+    padding: 0.5rem;
+    background: rgba($error-red, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid $error-red;
+  }
+
+  ::ng-deep {
+    .mat-mdc-form-field {
+      .mat-mdc-text-field-wrapper {
+        background: $bg-light-card;
+        border: 1px solid rgba($primary-purple, 0.2);
+      }
+      
+      .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+          color: $text-light !important;
+          caret-color: $text-light;
+      }
+      .mat-mdc-text-field-wrapper .mat-mdc-floating-label {
+          color: $text-secondary !important;
+      }
+
+      .mat-mdc-form-field-error {
+        color: $error-red;
+      }
+    }
+
+    .mat-primary {
+      --mdc-filled-text-field-caret-color: $primary-purple;
+      --mdc-filled-text-field-focus-active-indicator-color: $primary-purple;
+      --mdc-filled-text-field-focus-label-text-color: $primary-purple;
+    }
+
+    .mat-datepicker-toggle {
+      color: $primary-purple;
+    }
+
+    .mat-mdc-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: $bg-light-card; 
+      color: $text-light;
+      
+      mat-icon {
+        color: $primary-purple;
+      }
+
+      &.mdc-list-item--selected {
+        background: rgba($primary-purple, 0.2);
+      }
+      
+      .mdc-list-item__primary-text {
+          color: $text-light;
+      }
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  button {
+    min-width: 140px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+
+    &[type="submit"] {
+      background: linear-gradient(135deg, $primary-purple 0%, #a855f7 100%) !important;
+      color: white !important;
+      box-shadow: 0 4px 15px rgba($primary-purple, 0.3);
+      flex: 1;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba($primary-purple, 0.4);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+
+    &[type="button"] {
+      background: $bg-light-card !important;
+      color: $text-secondary !important;
+      border: 1px solid rgba($primary-purple, 0.2);
+
+      &:hover {
+        background: rgba($bg-light-card, 0.8) !important;
+      }
+    }
+  }
+
+  .button-spinner {
+    display: inline-block;
+    
+    ::ng-deep circle {
+      stroke: white !important;
+    }
+  }
+}
+
+// ===== SNACKBAR =====
+::ng-deep {
+  .success-snackbar {
+    background: linear-gradient(135deg, $success-green 0%, #059669 100%) !important;
+    color: white !important;
+
+    .mat-mdc-button {
+      color: white !important;
+    }
+  }
+
+  .error-snackbar {
+    background: linear-gradient(135deg, $error-red 0%, #991b1b 100%) !important;
+    color: white !important;
+
+    .mat-mdc-button {
+      color: white !important;
+    }
+  }
+}
+
+// ===== ANIMATIONS =====
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ===== RESPONSIVE =====
+@media (max-width: 768px) {
+  .create-event-container {
+    padding: 1rem;
+  }
+
+  .back-button {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .form-card {
+    ::ng-deep .mat-mdc-card-header {
+      padding: 1.5rem 1rem 0 1rem !important;
+    }
+
+    ::ng-deep .mat-mdc-card-content {
+      padding: 1rem !important;
+    }
+  }
+
+  .form-title {
+    font-size: 1.5rem !important;
+    flex-direction: column;
+
+    .title-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  .date-fields {
+    grid-template-columns: 1fr !important;
+  }
+
+  .form-actions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+# Node modules
+node_modules/
+frontend/frontend-app/node_modules/
+
+# Angular build
+dist/
+frontend/frontend-app/dist/
+
+# Angular cache
+.angular/
+
+# Logs
+*.log
+# Angular
+.angular/
+.angular/cache/
+dist/
+tmp/
+
+# Node
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+Thumbs.db
+.DS_Store
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

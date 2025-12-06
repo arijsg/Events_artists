@@ -1,0 +1,39 @@
+<div class="app-container">
+  <!-- Navigation Bar -->
+  <mat-toolbar class="app-navbar">
+    <!-- Logo et titre -->
+    <div class="navbar-brand">
+      <mat-icon class="brand-icon">music_note</mat-icon>
+      <span class="brand-title">Event Manager</span>
+    </div>
+
+    <!-- Spacer -->
+    <span class="spacer"></span>
+
+    <!-- Navigation Links -->
+    <nav class="nav-links">
+      <a 
+        mat-button 
+        routerLink="/events" 
+        routerLinkActive="active-link"
+        class="nav-link">
+        <mat-icon>event</mat-icon>
+        <span>Événements</span>
+      </a>
+
+      <a 
+        mat-button 
+        routerLink="/artists" 
+        routerLinkActive="active-link"
+        class="nav-link">
+        <mat-icon>mic</mat-icon>
+        <span>Artistes</span>
+      </a>
+    </nav>
+  </mat-toolbar>
+
+  <!-- Contenu principal -->
+  <main class="app-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

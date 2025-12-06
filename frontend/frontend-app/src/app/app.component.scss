@@ -1,0 +1,322 @@
+
+:host {
+  display: block;
+  min-height: 100vh;
+  
+
+  background: 
+    
+    url('../assets/bg2.png'); 
+    
+  background-size: cover; 
+  background-position: center;
+  background-attachment: fixed;
+  
+  color: #ffffff;
+}
+
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #5b21b6 0%, #bf00c5 100%) !important; 
+  color: white !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(91, 33, 182, 0.4); 
+  padding: 0 2rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+*
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+
+    .brand-icon {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+      color: #93c5fd; 
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1rem;
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      position: relative;
+
+      mat-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: white !important;
+        transform: translateY(-2px);
+      }
+
+      &.active-link {
+        background: rgba(255, 255, 255, 0.25);
+        color: white !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60%;
+          height: 3px;
+          background: #34d399; 
+          border-radius: 10px;
+          box-shadow: 0 2px 10px rgba(52, 211, 153, 0.8);
+        }
+      }
+    }
+  }
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+
+.sidenav-container {
+  height: 100vh;
+}
+
+.app-sidenav {
+  width: 250px;
+  background: linear-gradient(180deg, #5b21b6 0%, #ec4899 50%, #06b6d4 100%) !important; 
+  color: white;
+  padding: 0;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+
+  .sidenav-header {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+    .sidenav-icon {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      color: #34d399;
+      margin-bottom: 0.5rem;
+      animation: bounce 2s infinite;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  .sidenav-nav {
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .sidenav-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      color: rgba(255, 255, 255, 0.9) !important;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      justify-content: flex-start;
+      width: 100%;
+      text-align: left;
+
+      mat-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        color: #93c5fd; /* Couleur d'icône plus claire */
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(5px);
+      }
+
+      &.active-sidenav-link {
+        background: rgba(255, 255, 255, 0.25);
+        color: white !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border-left: 4px solid #34d399; /* Bordure Cyan */
+      }
+    }
+  }
+}
+
+.app-with-fab {
+  position: relative;
+  min-height: 100vh;
+}
+
+.fab-navigation {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 1000;
+
+  .fab-button {
+    // NOUVEAU DÉGRADÉ FAB : Violet/Rose
+    background: linear-gradient(135deg, #5b21b6 0%, #ec4899 100%) !important; 
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(91, 33, 182, 0.4) !important;
+    transition: all 0.3s ease;
+    width: 60px;
+    height: 60px;
+
+    mat-icon {
+      font-size: 1.75rem;
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+
+    &:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 8px 30px rgba(91, 33, 182, 0.6) !important;
+    }
+
+    &.active-fab {
+      background: linear-gradient(135deg, #4c1d95 0%, #9333ea 100%) !important; /* Dégradé plus foncé */
+      box-shadow: 0 8px 30px rgba(76, 29, 149, 0.6) !important;
+      transform: scale(1.15);
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-navbar {
+    padding: 0 1rem;
+    height: 60px;
+
+    .navbar-brand {
+      font-size: 1.25rem;
+
+      .brand-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+
+    .nav-links {
+      gap: 0.5rem;
+
+      .nav-link {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+
+        span {
+          display: none; 
+        }
+
+        mat-icon {
+          font-size: 1.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+    }
+  }
+
+  .app-sidenav {
+    width: 200px;
+
+    .sidenav-header {
+      padding: 1.5rem 1rem;
+
+      .sidenav-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+
+      h2 {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .fab-navigation {
+    bottom: 1rem;
+    right: 1rem;
+
+    .fab-button {
+      width: 50px;
+      height: 50px;
+
+      mat-icon {
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+}

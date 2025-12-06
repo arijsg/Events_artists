@@ -1,0 +1,99 @@
+<div class="create-event-container">
+  
+  <!-- Bouton retour -->
+  <button mat-icon-button class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title class="form-title">
+        <mat-icon class="title-icon">add_circle</mat-icon>
+        Créer un nouvel événement
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Loading spinner -->
+      <div *ngIf="isLoading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Chargement des artistes...</p>
+      </div>
+
+      <form *ngIf="!isLoading" [formGroup]="eventForm" (ngSubmit)="submit()">
+
+        <!-- Nom de l'événement -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom de l'événement</mat-label>
+          <input matInput formControlName="label" placeholder="Ex: Hellfest 2025">
+          <mat-icon matPrefix>label</mat-icon>
+          <mat-error *ngIf="eventForm.get('label')?.invalid">
+            {{ labelError }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Dates -->
+        <div class="date-fields">
+          <!-- Date de début -->
+          <mat-form-field appearance="outline">
+            <mat-label>Date de début</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+            <mat-error *ngIf="eventForm.get('startDate')?.invalid">
+              La date de début est obligatoire
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Date de fin -->
+          <mat-form-field appearance="outline">
+            <mat-label>Date de fin</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+            <mat-error *ngIf="eventForm.get('endDate')?.invalid">
+              La date de fin est obligatoire
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Erreur de validation des dates -->
+        <mat-error *ngIf="eventForm.hasError('dateInvalid')" class="form-error">
+          {{ dateError }}
+        </mat-error>
+
+        <!-- Sélection des artistes -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Artistes participants (optionnel)</mat-label>
+          <mat-select formControlName="artistIds" multiple>
+            <mat-option *ngFor="let artist of artists" [value]="artist.id">
+              <mat-icon>person</mat-icon>
+              {{ artist.label }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>mic</mat-icon>
+          <mat-hint>Sélectionnez un ou plusieurs artistes</mat-hint>
+        </mat-form-field>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button mat-raised-button type="button" (click)="goBack()">
+            <mat-icon>cancel</mat-icon>
+            Annuler
+          </button>
+          
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit" 
+            [disabled]="eventForm.invalid || isSubmitting">
+            <mat-spinner *ngIf="isSubmitting" diameter="20" class="button-spinner"></mat-spinner>
+            <mat-icon *ngIf="!isSubmitting">save</mat-icon>
+            {{ isSubmitting ? 'Création...' : 'Créer l\'événement' }}
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
